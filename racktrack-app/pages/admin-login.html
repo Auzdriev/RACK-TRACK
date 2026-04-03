@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RackTrack | Admin Login</title>
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+
+  <style>
+    .adminCard{
+      position: relative;
+    }
+
+    .close-btn{
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+      transition: transform 0.2s ease, background 0.2s ease;
+      z-index: 10;
+    }
+
+    .close-btn svg{
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: #1e3a8a;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .close-btn:hover{
+      transform: scale(1.08);
+      background: #1e3a8a;
+    }
+
+    .close-btn:hover svg{
+      stroke: #ffffff;
+    }
+
+    .adminCard.closing{
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    /* =========================
+       PASSWORD TOGGLE
+    ========================= */
+    .password-wrap{
+      position: relative;
+      width: 100%;
+    }
+
+    .password-wrap .input{
+      width: 100%;
+      padding-right: 52px;
+    }
+
+    .toggle-password{
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+    }
+
+    .toggle-password svg{
+      width: 22px;
+      height: 22px;
+      stroke: #1e3a8a;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .toggle-password:hover{
+      opacity: 0.75;
+    }
+
+    /* =========================
+       NAME ROW
+    ========================= */
+    .nameRow{
+      display: grid;
+      grid-template-columns: 1fr 1fr 110px;
+      gap: 10px;
+    }
+
+    @media (max-width: 640px){
+      .nameRow{
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =========================
+       PASSWORD REQUIREMENTS
+    ========================= */
+    .pwRequirementBox{
+      margin-top: 6px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(31,98,214,.18);
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    }
+
+    .pwReqTitle{
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #1d5cc7;
+    }
+
+    .pwReqList{
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12px;
+      color: rgba(0,0,0,.82);
+      line-height: 1.6;
+    }
+
+    .pwReqList li.valid{
+      color: green;
+      font-weight: 700;
+    }
+
+    /* =========================
+       LOGIN SUCCESS SPLASH
+    ========================= */
+    #login-success-overlay{
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+
+    #login-success-overlay.show{
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+
+    #login-success-overlay img{
+      width: 170px;
+      max-width: 42vw;
+      height: auto;
+      object-fit: contain;
+      transform: scale(0.94);
+      opacity: 0;
+    }
+
+    #login-success-overlay.show img{
+      animation: zoomPulse 0.9s ease forwards;
+    }
+
+    @keyframes zoomPulse{
+      0%{
+        transform: scale(0.90);
+        opacity: 0;
+      }
+      40%{
+        transform: scale(1.03);
+        opacity: 1;
+      }
+      100%{
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body class="theme-admin">
+  <div class="bg blurBg"></div>
+  <div class="bgGlow"></div>
+
+  <main class="screen centerOnly">
+    <section class="adminCard" id="frame">
+
+      <button type="button" class="close-btn" onclick="closeAdminCard()">
+        <svg viewBox="0 0 24 24">
+          <path d="M6 6L18 18M18 6L6 18"></path>
+        </svg>
+      </button>
+
+      <h2 class="loginTitle">
+        Log in as Admin
+        <span class="miniIcon">
+          <img src="../assets/images/Vector.svg" alt="Admin Icon">
+        </span>
+      </h2>
+
+      <p class="loginSub">See your growth and get support!</p>
+
+      <form class="form" id="adminForm">
+        <label class="label">User ID:</label>
+        <input
+          class="input"
+          type="text"
+          id="loginUsername"
+          placeholder="Enter your User ID..."
+          required
+        />
+
+        <label class="label">Password:</label>
+        <div class="password-wrap">
+          <input
+            class="input"
+            type="password"
+            id="loginPassword"
+            placeholder="Enter your password..."
+            required
+          />
+          <button type="button" class="toggle-password" data-target="loginPassword" aria-label="Show password">
+            <svg viewBox="0 0 24 24" class="eye-open">
+              <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+
+        <div class="rowBetween">
+          <label class="check">
+            <input type="checkbox" id="rememberMe" />
+            <span>Remember me</span>
+          </label>
+          <a class="link" href="#" onclick="openForgot(event, 'admin')">Forgot Password</a>
+        </div>
+
+        <p id="loginMsg" class="formMsg"></p>
+
+        <button class="btn wide gradBlueGreen" type="submit">Log in</button>
+
+        <p class="bottomText">
+          Not registered yet?
+          <a class="link" href="#" onclick="openCreate(event, 'admin')">Create an account</a>
+        </p>
+      </form>
+    </section>
+
+    <div class="overlay" id="overlay" onclick="closeModal()"></div>
+
+    <div class="modal" id="createModal">
+      <div class="modalCard">
+        <button class="closeBtn" type="button" onclick="closeModal()">✕</button>
+
+        <h2 class="modalTitle">Create Account</h2>
+        <p class="modalSub">Fill in your details to create a username and password.</p>
+
+        <form class="form modalForm" id="createForm">
+          <label class="label">Full Name</label>
+          <div class="nameRow">
+            <input class="input" type="text" id="lastName" placeholder="Last Name" required />
+            <input class="input" type="text" id="firstName" placeholder="First Name" required />
+            <input class="input" type="text" id="middleInitial" placeholder="MI" maxlength="3" required />
+          </div>
+
+          <label class="label">Email</label>
+          <input class="input" type="email" id="email" placeholder="Enter your email..." required />
+
+          <label class="label">Username</label>
+          <input class="input" type="text" id="username" placeholder="Create a username..." required />
+
+          <label class="label">Password</label>
+          <div class="password-wrap">
+            <input
+              class="input"
+              type="password"
+              id="password"
+              placeholder="Create a password..."
+              title="Password must include at least 1 uppercase and at least 3 numbers. No special symbols allowed."
+              required
+            />
+            <button type="button" class="toggle-password" data-target="password" aria-label="Show password">
+              <svg viewBox="0 0 24 24" class="eye-open">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <div class="pwRequirementBox">
+            <p class="pwReqTitle">Password Requirements</p>
+
+            <div class="pwMeter">
+              <div class="pwBar" id="pwBar"></div>
+            </div>
+
+            <div class="pwLabels">
+              <span id="pwWeak">Weak</span>
+              <span id="pwMedium">Medium</span>
+              <span id="pwStrong">Strong</span>
+            </div>
+
+            <p class="pwHint" id="pwHint">Use at least 1 uppercase and 3 numbers. No symbols.</p>
+
+            <ul class="pwReqList">
+              <li id="reqUpper">At least 1 uppercase letter</li>
+              <li id="reqDigits">At least 3 numbers</li>
+              <li id="reqAllowed">Letters and numbers only (no symbols)</li>
+            </ul>
+          </div>
+
+          <label class="label">Confirm Password</label>
+          <div class="password-wrap">
+            <input class="input" type="password" id="confirmPassword" placeholder="Confirm your password..." required />
+            <button type="button" class="toggle-password" data-target="confirmPassword" aria-label="Show password">
+              <svg viewBox="0 0 24 24" class="eye-open">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <p id="createMsg" class="formMsg"></p>
+
+          <button type="submit" class="btn wide gradBlue">Create Account</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="forgotModal">
+      <div class="modalCard">
+        <button class="closeBtn" type="button" onclick="closeModal()">✕</button>
+
+        <h2 class="modalTitle">Reset Password</h2>
+        <p class="modalSub">Enter your account and set a new password.</p>
+
+        <form class="form modalForm" id="forgotForm">
+          <label class="label">Username or Email</label>
+          <input class="input" type="text" id="identifier" placeholder="Enter username or email..." required />
+
+          <label class="label">New Password</label>
+          <div class="password-wrap">
+            <input class="input" type="password" id="newPassword" placeholder="Enter new password..." required />
+            <button type="button" class="toggle-password" data-target="newPassword" aria-label="Show password">
+              <svg viewBox="0 0 24 24" class="eye-open">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <label class="label">Confirm Password</label>
+          <div class="password-wrap">
+            <input class="input" type="password" id="confirmNewPassword" placeholder="Confirm new password..." required />
+            <button type="button" class="toggle-password" data-target="confirmNewPassword" aria-label="Show password">
+              <svg viewBox="0 0 24 24" class="eye-open">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <p id="forgotMsg" class="formMsg"></p>
+
+          <button type="submit" class="btn wide gradBlue">Reset Password</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- SUCCESS LOGIN OVERLAY -->
+  <div id="login-success-overlay">
+    <img src="../assets/images/logo.png" alt="RackTrack Logo">
+  </div>
+
+  <script>
+    function closeAdminCard(){
+      const card = document.getElementById("frame");
+      card.classList.add("closing");
+
+      setTimeout(() => {
+        window.location.href = "role.html";
+      }, 350);
+    }
+  </script>
+
+  <script>
+  function openCreate(event) {
+    event.preventDefault();
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("createModal").style.display = "flex";
+  }
+
+  function openForgot(event) {
+    event.preventDefault();
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("forgotModal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("createModal").style.display = "none";
+    document.getElementById("forgotModal").style.display = "none";
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const adminForm = document.getElementById("adminForm");
+
+    if (adminForm) {
+      adminForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const username = document.getElementById("loginUsername").value.trim();
+        const password = document.getElementById("loginPassword").value.trim();
+        const msg = document.getElementById("loginMsg");
+
+        if (!username || !password) {
+          msg.textContent = "Please enter your User ID and password.";
+          msg.className = "formMsg error";
+          return;
+        }
+
+        localStorage.setItem("racktrackUserRole", "admin");
+        window.location.href = "dashboard.html";
+      });
+    }
+
+    document.querySelectorAll(".toggle-password").forEach(button => {
+      button.addEventListener("click", () => {
+        const targetId = button.getAttribute("data-target");
+        const input = document.getElementById(targetId);
+        if (!input) return;
+
+        input.type = input.type === "password" ? "text" : "password";
+      });
+    });
+  });
+</script>
+
+  
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rack Track | Admin Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-block">
+        <img src="../assets/images/logo.png" alt="Rack Track logo" class="brand-logo" />
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-link active" data-section="dashboard-section" type="button">
+          <img src="../assets/images/dashboard.png" alt="Dashboard icon" />
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-link" data-section="inventory-section" type="button">
+          <img src="../assets/images/Inventory.png" alt="Inventory icon" />
+          <span>Inventory</span>
+        </button>
+
+        <button class="nav-link" data-section="orders-section" type="button">
+          <img src="../assets/images/Orders.png" alt="Orders icon" />
+          <span>Orders</span>
+        </button>
+
+        <button class="nav-link" data-section="customers-section" type="button">
+          <img src="../assets/images/Customer.png" alt="Customer icon" />
+          <span>Customer</span>
+        </button>
+
+        <button class="nav-link" data-section="reports-section" type="button">
+          <img src="../assets/images/Report.png" alt="Report icon" />
+          <span>Report</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="text-link" id="settingsBtn" type="button">
+          <img src="../assets/images/Setting Icon.png" alt="Settings">
+          <span>Settings</span>
+        </button>
+
+        <button class="text-link" id="logoutBtn" type="button">
+          <img src="../assets/images/Log Out Icon.png" alt="Log Out">
+          <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle" aria-label="Toggle sidebar" type="button">☰</button>
+
+          <label class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input id="globalSearch" type="search" placeholder="Search" />
+          </label>
+        </div>
+
+        <div class="topbar-right">
+          <div class="user-box">
+            <span class="user-name">Admin</span>
+            <span class="caret">⌄</span>
+          </div>
+          <button class="icon-btn" aria-label="Notifications" type="button">🔔</button>
+          <button class="icon-btn profile-btn" aria-label="Profile" type="button">◯</button>
+        </div>
+      </header>
+
+      <!-- DASHBOARD -->
+      <section class="page-section active" id="dashboard-section">
+        <section class="hero-panel">
+          <div class="hero-left">
+            <h1>Sales Activity</h1>
+
+            <div class="sales-grid">
+              <article class="activity-card">
+                <div class="metric-value success" id="packedCount">0</div>
+                <div class="metric-unit">quantity</div>
+                <div class="activity-meta">
+                  <img src="../assets/images/packed.png" alt="Packed icon" />
+                  <span>TO BE PACKED</span>
+                </div>
+              </article>
+
+              <article class="activity-card">
+                <div class="metric-value success" id="shippedCount">0</div>
+                <div class="metric-unit">package</div>
+                <div class="activity-meta">
+                  <img src="../assets/images/shipping.png" alt="Shipping icon" />
+                  <span>TO BE SHIPPED</span>
+                </div>
+              </article>
+
+              <article class="activity-card">
+                <div class="metric-value success" id="deliveredCount">0</div>
+                <div class="metric-unit">package</div>
+                <div class="activity-meta">
+                  <img src="../assets/images/quantity.png" alt="Delivery icon" />
+                  <span>TO BE DELIVERED</span>
+                </div>
+              </article>
+
+              <article class="activity-card">
+                <div class="metric-value success" id="invoicedCount">0</div>
+                <div class="metric-unit">quantity</div>
+                <div class="activity-meta">
+                  <img src="../assets/images/package.png" alt="Invoice icon" />
+                  <span>TO BE INVOICED</span>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <aside class="hero-summary">
+            <h2>Inventory Summary</h2>
+            <p>(In Quantity)</p>
+
+            <div class="summary-stack">
+              <div class="summary-chip">
+                <span>In-stock</span>
+                <strong id="inventorySummaryInStock">0</strong>
+              </div>
+
+              <div class="summary-chip">
+                <span>Re-stock</span>
+                <strong id="inventorySummaryRestock">0</strong>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="stats-row">
+          <article class="stat-card">
+            <div class="stat-top">
+              <img src="../assets/images/total_revenue.png" class="stat-icon" alt="Total Profit icon" />
+              <svg class="mini-graph" viewBox="0 0 120 40" id="revenueGraph">
+                <polyline points="" />
+              </svg>
+            </div>
+
+            <div class="stat-amount" id="dashboardRevenue">₱0.00</div>
+
+            <div class="stat-bottom">
+              <span>Total Profit</span>
+              <strong id="dashboardRevenuePercent">0%</strong>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <img src="../assets/images/total_expenses.png" class="stat-icon" alt="Total Expenses icon" />
+              <svg class="mini-graph" viewBox="0 0 120 40" id="expenseGraph">
+                <polyline points="" />
+              </svg>
+            </div>
+
+            <div class="stat-amount" id="dashboardExpenses">₱0.00</div>
+
+            <div class="stat-bottom">
+              <span>Total Expenses</span>
+              <strong id="dashboardExpensesPercent">0%</strong>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <img src="../assets/images/Group.png" class="stat-icon" alt="Customers icon" />
+              <svg class="mini-graph" viewBox="0 0 120 40" id="customerGraph">
+                <polyline points="" />
+              </svg>
+            </div>
+
+            <div class="stat-amount" id="dashboardCustomersCount">0</div>
+
+            <div class="stat-bottom">
+              <span>Total Customer</span>
+              <strong id="dashboardCustomersPercent">0%</strong>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-top">
+              <img src="../assets/images/total_order.png" class="stat-icon" alt="Orders icon" />
+              <svg class="mini-graph" viewBox="0 0 120 40" id="orderGraph">
+                <polyline points="" />
+              </svg>
+            </div>
+
+            <div class="stat-amount" id="dashboardOrdersCount">0</div>
+
+            <div class="stat-bottom">
+              <span>Total Order</span>
+              <strong id="dashboardOrdersPercent">0%</strong>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-bottom-grid">
+          <article class="panel inventory-panel">
+            <div class="panel-head split-head">
+              <div>
+                <h3>Inventory</h3>
+                <p>Low in stock</p>
+              </div>
+
+              <div class="align-right">
+                <button class="ghost-link" type="button" data-jump="inventory-section">view all</button>
+                <strong id="lowStockItemsCount">0 items</strong>
+              </div>
+            </div>
+
+            <div class="warning-banner">This item is low of stock, please order it soon!</div>
+
+            <div class="low-stock-list" id="lowStockList">
+              <div class="empty-state">No low stock items.</div>
+            </div>
+          </article>
+
+          <article class="panel top-selling-panel">
+            <div class="panel-head split-head">
+              <h3>Top Selling</h3>
+              <span class="filter-pill">This month ▾</span>
+            </div>
+
+            <table class="simple-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Sold</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody id="topSellingBody">
+                <tr>
+                  <td colspan="3" class="empty-state">No sales data yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="panel recent-orders-panel">
+            <div class="panel-head split-head">
+              <h3>Recent orders</h3>
+              <button class="ghost-link" type="button" data-jump="orders-section">view all</button>
+            </div>
+
+            <div class="recent-list" id="recentOrdersList">
+              <div class="empty-state">No recent orders.</div>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <!-- INVENTORY -->
+      <section class="page-section" id="inventory-section">
+        <div class="inventory-layout">
+          <div class="inventory-top-panel">
+            <div class="crud-header inventory-header-clean">
+              <div class="inventory-title-block">
+                <h2>Inventory Management</h2>
+                <p>Manage stock items and master product list.</p>
+              </div>
+
+              <div class="inventory-header-actions">
+                <button class="secondary-btn inventory-top-tab active" type="button" data-inventory-tab="items">
+                  Inventory Items
+                </button>
+
+                <button class="secondary-btn inventory-top-tab" type="button" data-inventory-tab="products">
+                  Products
+                </button>
+
+                <button class="secondary-btn category-btn" type="button" id="openCategoryBtn">
+                  + Category
+                </button>
+
+                <button class="primary-btn inventory-main-btn" type="button" id="inventoryMainActionBtn">
+                  + Add Item
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="inventory-bottom-panel">
+            <div class="inventory-subsection active" id="inventory-items-view">
+              <div class="crud-card inventory-card">
+                <div class="table-tools inventory-tools">
+                  <input type="search" id="inventorySearch" placeholder="Search inventory..." />
+                  <input type="date" id="inventoryDateFilter" />
+                  <button type="button" class="secondary-btn" id="inventoryLatestBtn">Latest</button>
+                  <button type="button" class="secondary-btn" id="inventoryClearDateBtn">Clear</button>
+                </div>
+
+                <div class="table-wrap">
+                  <table>
+                    <tbody id="inventoryTableBody">
+                      <tr>
+                        <td colspan="13" class="empty-state">No inventory records found.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="inventory-subsection" id="inventory-products-view">
+              <div class="crud-card inventory-card">
+                <div class="table-tools inventory-tools">
+                  <input type="search" id="productsSearch" placeholder="Search products..." />
+                </div>
+
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>SKU</th>
+                        <th>Variant</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Cost</th>
+                        <th>SRP</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                      <tr>
+                        <td colspan="9" class="empty-state">No products found.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="inventory-history-panel">
+            <div class="crud-card inventory-card stock-history-card">
+              <div class="stock-history-head">
+                <div>
+                  <h3>Inventory Movement History</h3>
+                  <p>Time and date record of stock changes, sold items, and stock activity.</p>
+                </div>
+
+                <div class="table-tools inventory-tools">
+                  <input type="search" id="stockHistorySearch" placeholder="Search movement history..." />
+                  <input type="date" id="stockHistoryDateFilter" />
+                  <button type="button" class="secondary-btn" id="stockHistoryLatestBtn">Latest</button>
+                  <button type="button" class="secondary-btn" id="stockHistoryClearDateBtn">Clear</button>
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table class="stock-history-table">
+                  <tbody id="stockHistoryTableBody">
+                    <tr>
+                      <td colspan="12" class="empty-state">No stock movement history yet.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ORDERS -->
+      <section class="page-section" id="orders-section">
+        <div class="crud-header">
+          <div>
+            <h2>Order Management</h2>
+            <p>Create, update, and delete order records.</p>
+          </div>
+          <button class="primary-btn" type="button" data-open-modal="orders">+ Add Order</button>
+        </div>
+
+        <div class="crud-card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Item</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr>
+                  <td colspan="7" class="empty-state">No orders found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- CUSTOMERS -->
+      <section class="page-section" id="customers-section">
+        <div class="crud-header">
+          <div>
+            <h2>Customer Management</h2>
+            <p>Maintain customer information from one place.</p>
+          </div>
+          <button class="primary-btn" type="button" data-open-modal="customers">+ Add Customer</button>
+        </div>
+
+        <div class="crud-card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Address</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customersTableBody">
+                <tr>
+                  <td colspan="5" class="empty-state">No customers found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORTS -->
+      <section class="page-section" id="reports-section">
+        <div class="crud-header">
+          <div>
+            <h2>Quick Reports</h2>
+            <p>Live summary based on your CRUD data.</p>
+          </div>
+        </div>
+
+        <div class="reports-grid">
+          <article class="report-box">
+            <h4>Total Inventory Items</h4>
+            <strong id="reportInventoryCount">0</strong>
+          </article>
+
+          <article class="report-box">
+            <h4>Total Orders</h4>
+            <strong id="reportOrderCount">0</strong>
+          </article>
+
+          <article class="report-box">
+            <h4>Total Customers</h4>
+            <strong id="reportCustomerCount">0</strong>
+          </article>
+
+          <article class="report-box">
+            <h4>Low Stock Items</h4>
+            <strong id="reportLowStockCount">0</strong>
+          </article>
+        </div>
+
+        <div class="daily-reports-wrap" id="dailyReportsWrap">
+          <div class="crud-card">
+            <div class="empty-state">No daily report records yet.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MAIN FORM MODAL -->
+  <div class="modal" id="formModal">
+    <div class="modal-card modal-card-lg">
+      <div class="modal-head">
+        <h3 id="modalTitle">Add Record</h3>
+        <button class="close-btn" id="closeModal" type="button">✕</button>
+      </div>
+      <form id="recordForm"></form>
+    </div>
+  </div>
+
+  <!-- CATEGORY MODAL -->
+  <div class="modal" id="categoryModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Manage Categories</h3>
+        <button class="close-btn" id="closeCategoryModal" type="button">✕</button>
+      </div>
+
+      <form id="categoryForm" class="category-form">
+        <div class="form-field">
+          <label>Category Name</label>
+          <input type="text" name="categoryName" placeholder="e.g. T-SHIRT" required />
+        </div>
+
+        <div class="form-field">
+          <label>Highlight Color</label>
+          <input type="color" name="categoryColor" id="categoryColor" value="#f2b14c" />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="secondary-btn" id="cancelCategoryBtn">Cancel</button>
+          <button type="submit" class="primary-btn">Save Category</button>
+        </div>
+      </form>
+
+      <div class="category-list-wrap">
+        <h4>Saved Categories</h4>
+        <div id="categoryList">
+          <div class="empty-state">No categories yet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGOUT MODAL -->
+  <div class="logout-modal" id="logoutModal">
+    <div class="logout-modal-card">
+      <h3>Log Out</h3>
+      <p>Are you sure you want to continue logging out?</p>
+      <div class="logout-actions">
+        <button type="button" class="logout-cancel-btn" id="cancelLogoutBtn">Cancel</button>
+        <button type="button" class="logout-confirm-btn" id="confirmLogoutBtn">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/dashboard-core.js"></script>
+  <script src="../assets/js/dashboard-panel-dashboard.js"></script>
+  <script src="../assets/js/dashboard-panel-inventory.js"></script>
+  <script src="../assets/js/dashboard-panel-orders.js"></script>
+  <script src="../assets/js/dashboard-panel-customers.js"></script>
+  <script src="../assets/js/dashboard-panel-reports.js"></script>
+  <script src="../assets/js/dashboard.js"></script>
+</body>
+</html>
